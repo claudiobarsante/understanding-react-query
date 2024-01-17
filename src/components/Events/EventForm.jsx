@@ -1,9 +1,13 @@
 import { useState } from 'react';
-
+import { useQuery } from '@tanstack/react-query';
 import ImagePicker from '../ImagePicker.jsx';
 
 export default function EventForm({ inputData, onSubmit, children }) {
   const [selectedImage, setSelectedImage] = useState(inputData?.image);
+
+  useQuery({
+    
+  })
 
   function handleSelectImage(image) {
     setSelectedImage(image);
