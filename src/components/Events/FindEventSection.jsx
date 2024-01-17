@@ -6,7 +6,7 @@ import ErrorBlock from '../UI/ErrorBlock';
 import EventItem from './EventItem';
 export default function FindEventSection() {
   const searchElement = useRef();
-  const [searchTerm,setSearchTerm] = useState('');
+  const [searchTerm,setSearchTerm] = useState();
   
   /*
   ? signal --
@@ -17,9 +17,15 @@ export default function FindEventSection() {
    continue to use normal async/await syntax while getting all the benefits of automatic 
    cancellation.
   */
-  const {data, isPending,isError,error} = useQuery({
+ /*
+ ? enabled --
+ enable if the query will run or not
+ */
+//* --The query by default will run every time the state of searchTerm changes.
+  const {data, isLoading,isError,error} = useQuery({
     queryKey:['elements',{search:searchTerm}],// add one more key to not mix with the results of NewEventsSection
-    queryFn:({signal})=> fetchEvents({signal, search:searchTerm})
+    queryFn:({signal})=> fetchEvents({signal, searchTerm}),
+    enabled: searchTerm !== undefined // -- will only run if searchTerm has a value
   });
 
   function handleSubmit(event) {
@@ -29,7 +35,7 @@ export default function FindEventSection() {
 
   let content =  <p>Please enter a search term and to find events.</p>;
 
-  if(isPending) content = <LoadingIndicator/>;
+  if(isLoading) content = <LoadingIndicator/>;
 
   if(isError) content = <ErrorBlock title="An error occurred" message={error.message}/>;
  
