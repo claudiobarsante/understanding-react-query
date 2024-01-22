@@ -18,7 +18,8 @@ export default function EventDetails() {
   const {mutate,isPending:isPendingMutate,isError:isErrorMutate,error:errorMutate} = useMutation({
     mutationFn: deleteEvent,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:['events']}); // -- tells reacquery that all querys that includes queryKey:['events'] are stale, so they need to be refetched. The events will be refetched in the section 'Recently added  events' for example
+      queryClient.invalidateQueries({queryKey:['events'],
+       refetchType: 'none'}); //--If you do not want active queries to refetch, and simply be marked as invalid, you can use the refetchType: 'none' option.
       navigate('/events');
     }
   });
