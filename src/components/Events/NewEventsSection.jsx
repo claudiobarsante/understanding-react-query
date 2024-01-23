@@ -6,9 +6,12 @@ import EventItem from './EventItem.jsx';
 import { fetchEvents } from '../../util/http.js';
 
 export default function NewEventsSection() {
+  const NUMBER_OF_LATEST_EVENTS = 3;
+
   const {data,isPending, isError,error}= useQuery({
-    queryKey:['events'],
-    queryFn:fetchEvents,
+    queryKey:['events', {max:NUMBER_OF_LATEST_EVENTS}],
+    queryFn:({signal,queryKey})=> fetchEvents({signal, ...queryKey[1]}),
+    // -- it's the same of the line above ☝️- queryFn:({signal,queryKey})=> fetchEvents({signal, max:NUMBER_OF_LATEST_EVENTS}),
     staleTime:5000 // -- mileseconds
     //? gcTime: this controls how log the cache in data will be kept around, default i 5min
   });
